@@ -4,32 +4,62 @@
 path {
   stroke: #cce;
   stroke-width: 0.25px;
-  fill: #99b;
+  fill: #bbd;
+}
+
+.symbol {
+  fill: blue;
+  fill-opacity: .8;
+  stroke: #fff;  
 }
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
 
 <script>
 var width = 960,
     height = 500;
 
-var projection = d3.geo.mercator()
-    .center([0, 5 ])
-    .scale(900)
-    .rotate([-180,0]);
+var projection = d3.geo.mercator();
+var path = d3.geo.path()
+    .projection(projection);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+queue()
+    .defer(d3.json, "data/world-50m.json")
+    .defer(d3.csv, "https://docs.google.com/spreadsheet/pub?key=0AjPWVMj9wWa6dDJOVE5DVTRxbjc2Vy1PMVlQTlh4eFE&single=true&gid=0&output=csv")
+    .await(ready);
+
 // load and display the World
-d3.json("data/world-50m.json", function(error, topology) {
+function ready(error, world, workshops) {
+    if (error) return console.log("there was an error loading the data: " + error);
+
     svg.append("path")
-      .datum(topojson.feature(topology, topology.objects.countries))
-      .attr("d", d3.geo.path().projection(d3.geo.mercator()));
-});
+      .datum(topojson.feature(world, world.objects.countries))
+      .attr("d", path);
+
+  svg.selectAll("circle")
+      .data(workshops)
+      .enter().append("circle")
+      .attr("class", "symbol")
+       .attr("cx", function(d) {
+                   return projection([d.longitude, d.latitude])[0];
+           })
+           .attr("cy", function(d) {
+                   return projection([d.longitude, d.latitude])[1];        
+           })
+           .attr("r", function(d) { 
+                  console.log(d.city)
+                  console.log(d.number)
+                  return 5;
+                 //return d.number 
+            }); 
+}
 
 </script>
 </body>
