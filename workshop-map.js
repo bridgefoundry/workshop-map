@@ -42,8 +42,8 @@ function workshopMap() {
               .attr("r", d => 5)
               .on("mouseover", function(d) {
                 var html = `${d.city}<br/>`;
-                if (d["number (2013?)"]) { html += `${d["number (2013?)"]} Workshop`; }
-                if (+d["number (2013?)"] > 1) { html += "s"; }
+                //if (d["number (2013?)"]) { html += `${d["number (2013?)"]} Workshop`; }
+                //if (+d["number (2013?)"] > 1) { html += "s"; }
                 tooltipDiv.html(html);
                 tooltipDiv.style("opacity", 0);
                 tooltipDiv.attr("class", "tooltip");
