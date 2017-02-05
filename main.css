@@ -1,34 +1,12 @@
-path {
-  stroke: #cce;
-  stroke-width: 0.25px;
-  fill: #bbd;
-}
-
-.symbol {
-  fill: blue;
-  fill-opacity: .8;
-  stroke: #fff;
-}
-
-div.tooltip {
-  position: absolute;
-  text-align: center;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 1em;
-  background: lightgrey;
-}
-
-div.hide {
-  display: none;
+body {
+  margin: 0px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 h1 {
   position:absolute;
-  top:0;
+  top: 400px;
   margin: 12px;
+  font-weight: normal;
 }
 
-body {
-  margin: 0px;
-}
