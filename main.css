@@ -22,3 +22,13 @@ div.tooltip {
 div.hide {
   display: none;
 }
+
+h1 {
+  position:absolute;
+  top:0;
+  margin: 12px;
+}
+
+body {
+  margin: 0px;
+}
