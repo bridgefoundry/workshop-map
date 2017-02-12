@@ -22,7 +22,7 @@ function workshopMap() {
       // google spreadsheets no longer allows cross-domain access
       d3.queue()
           .defer(d3.json, "http://bridgefoundry.org/workshop-map/data/world-50m.json")
-          .defer(d3.csv, "http://bridgefoundry.org/workshop-map/data/workshop-data.csv")
+          .defer(d3.json, "https://www.bridgetroll.org/events.json")
           .await(ready);
 
       // load and display the World
@@ -33,8 +33,12 @@ function workshopMap() {
           .datum(topojson.feature(world, world.objects.countries))
           .attr("d", path);
 
+        var workshop_locations = workshops.map(function(workshop) {
+          return workshop.location;
+        });
+
         svg.selectAll("circle")
-            .data(workshops)
+            .data(workshop_locations)
             .enter().append("circle")
               .attr("class", "symbol")
               .attr("cx", d => projection([d.longitude, d.latitude])[0])
