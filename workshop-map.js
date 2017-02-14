@@ -20,8 +20,8 @@ function workshopMap() {
       // source: https://docs.google.com/spreadsheet/pub?key=0AjPWVMj9wWa6dDJOVE5DVTRxbjc2Vy1PMVlQTlh4eFE&single=true&gid=0&output=csv
       // google spreadsheets no longer allows cross-domain access
       d3.queue()
-          .defer(d3.json, "http://bridgefoundry.org/workshop-map/data/world-50m.json")
-          .defer(d3.csv, "http://bridgefoundry.org/workshop-map/data/workshop-data.csv")
+          .defer(d3.json, "data/world-50m.json")
+          .defer(d3.csv, "data/workshop-data.csv")
           .await(ready);
 
       // load and display the World
