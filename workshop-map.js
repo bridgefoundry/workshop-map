@@ -1,16 +1,15 @@
-//   d3.select("#example").call(workshopMap().width(400).height(300));
 function workshopMap() {
   var width = 960,
       height = 450;
-
   function chart(selection) {
     selection.each(function(data) {
 
       var projection = d3.geoMercator();
+
       var path = d3.geoPath()
           .projection(projection);
 
-      // Select the svg element, if it exists.
+
       var svg = d3.select(this).append("svg")
           .attr("width", width)
           .attr("height", height);
@@ -28,12 +27,18 @@ function workshopMap() {
       // load and display the World
       function ready(error, world, workshops) {
         if (error) return console.log("there was an error loading the data: " + error);
+        var zoom,
+            circles;
 
-        svg.append("path")
-          .datum(topojson.feature(world, world.objects.countries))
-          .attr("d", path);
+        const g = svg.append("g");
 
-        svg.selectAll("circle")
+        g.append("path")
+            .datum(topojson.feature(world, world.objects.countries))
+            .attr("d", path);
+
+
+
+        circles = svg.selectAll("circle")
             .data(workshops)
             .enter().append("circle")
               .attr("class", "symbol")
@@ -54,7 +59,25 @@ function workshopMap() {
                 tooltipDiv.style("opacity",1);
                 console.log(`City: ${d.city}, # of Workshops: ${d["number (2013?)"]}`);
               })
-              .on("mouseout", d => tooltipDiv.attr("class", "tooltip hide"));
+              .on("mouseout", d => {
+                tooltipDiv.attr("class", "tooltip hide");
+                g.select("path").node().focus();
+              });
+
+        zoom = d3.zoom().on("zoom", zoomed)
+        function zoomed(d) {
+          const transform = d3.event.transform;
+          const x = transform.x;
+          const y = transform.y;
+          const k = transform.k;
+          circles.transition().duration(100)
+            .attr("transform", `translate(${x},${y}) scale(${k})`);
+          g.transition().duration(100)
+            .attr("transform", `translate(${x},${y}) scale(${k})`);
+        }
+
+        g.select("path").node().focus();
+        svg.call(zoom);
       }
     });
   }
