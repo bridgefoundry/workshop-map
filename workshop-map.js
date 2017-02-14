@@ -71,9 +71,13 @@ function workshopMap() {
           const y = transform.y;
           const k = transform.k;
           circles.transition().duration(100)
-            .attr("transform", `translate(${x},${y}) scale(${k})`);
+            .attr("transform", `translate(${x},${y}) scale(${k})`)
+            .attr("r", k < 4 ? 5 - k + 0.1 : 5/k)
+            .attr("stroke-width", k < 2 ? .75 : 0);
+
           g.transition().duration(100)
-            .attr("transform", `translate(${x},${y}) scale(${k})`);
+            .attr("transform", `translate(${x},${y}) scale(${k})`)
+            .attr("stroke-width", k < 2 ? 2 : 0.0001);
         }
 
         g.select("path").node().focus();
