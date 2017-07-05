@@ -17,11 +17,10 @@ function workshopMap() {
       var tooltipDiv = d3.select("body").append("div")
           .attr("class", "tooltip hide")
 
-      // source: https://docs.google.com/spreadsheet/pub?key=0AjPWVMj9wWa6dDJOVE5DVTRxbjc2Vy1PMVlQTlh4eFE&single=true&gid=0&output=csv
-      // google spreadsheets no longer allows cross-domain access
       d3.queue()
           .defer(d3.json, "data/world-50m.json")
-          .defer(d3.csv, "data/workshop-data.csv")
+          // see Readme for setting up test environment for making this GET request locally
+          .defer(d3.json, "https://bridgetroll.org/events.json?type=all")
           .await(ready);
 
       // load and display the World
@@ -36,19 +35,15 @@ function workshopMap() {
             .datum(topojson.feature(world, world.objects.countries))
             .attr("d", path);
 
-
-
         circles = svg.selectAll("circle")
             .data(workshops)
             .enter().append("circle")
               .attr("class", "symbol")
-              .attr("cx", d => projection([d.longitude, d.latitude])[0])
-              .attr("cy", d => projection([d.longitude, d.latitude])[1])
+              .attr("cx", d => projection([d.location.longitude, d.location.latitude])[0])
+              .attr("cy", d => projection([d.location.longitude, d.location.latitude])[1])
               .attr("r", d => 5)
               .on("mouseover", function(d) {
-                var html = `${d.city}<br/>`;
-                //if (d["number (2013?)"]) { html += `${d["number (2013?)"]} Workshop`; }
-                //if (+d["number (2013?)"] > 1) { html += "s"; }
+                var html = `${d.location.city}<br/>`;
                 tooltipDiv.html(html);
                 tooltipDiv.style("opacity", 0);
                 tooltipDiv.attr("class", "tooltip");
@@ -57,7 +52,6 @@ function workshopMap() {
                 tooltipDiv.style("left", `${d3.event.pageX - (width / 2)}px`);
                 tooltipDiv.style("top", `${d3.event.pageY - height - 20}px`);
                 tooltipDiv.style("opacity",1);
-                console.log(`City: ${d.city}, # of Workshops: ${d["number (2013?)"]}`);
               })
               .on("mouseout", d => {
                 tooltipDiv.attr("class", "tooltip hide");

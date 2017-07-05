@@ -1,18 +1,28 @@
 == Workshop of the World Visualization ==
 
-The [location data](https://docs.google.com/a/ultrasaurus.com/spreadsheet/ccc?key=0AjPWVMj9wWa6dDJOVE5DVTRxbjc2Vy1PMVlQTlh4eFE#gid=0) 
-was gathered from [Bridge Troll](http://www.bridgetroll.org/) and other reports of activity from workshop leaders who use alternate registration systems.  Contact Sarah Allen (@ultrasaurus) if you know of a city that is not representated.
+The location data has been gathered from [Bridge Troll](http://www.bridgetroll.org/). Contact Sarah Allen (@ultrasaurus) if you know of a city that is not representated.
 
 To run locally, here's a list of [HTTP server one-liners](https://gist.github.com/willurd/5720255)
 
-## Wish List
+### Running data in map locally with Bridge Troll
+* start Bridge Troll locally using `rails server`
 
+* Update BridgeTroll and workshop-map source code
+  * within BridgeTroll source code:
+    * update `allow_insecure?` to `true`
+    * `config/application.rb` add your local server
+      * Ex: I am using `python -m SimpleHTTPServer`, so I added 'localhost:8000'. Resulting in: `origins 'bridgefoundry.org', 'localhost:8000'`
+  * within this "workshop-map" repo
+    * update `workshop-map.js` to include`.defer(d3.json, "http://localhost:3000/events.json?type=past")`, instead of `defer(d3.json, "https://bridgetroll.orb/events.json?type=all")`
+      * you can set the `type` query param to "all", "past" or "future".
+
+## Wish List
 * The title should be part of the map, rather than on the index page, to make
   it easier to embed.
 * Link to this repo in small text in the lower-right
 * Resize map based on width and height. Note that currently the map is artfully
   cropped since we haven't had any workshops in the north and south poles, and
-  we should keep that feature while allowing for setting width/height to 
+  we should keep that feature while allowing for setting width/height to
   grow or shrink the map. This would enable it to fit nicely in a blog post
   and be easily viewed on mobile devices.
 * Show the map in the README
